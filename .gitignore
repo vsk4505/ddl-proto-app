@@ -63,3 +63,12 @@ fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
+
+# misc
+.gradle
+/local.properties
+/.idea/
+/captures/
+/build
+*.iml
+.gradletasknamecache
