@@ -1,18 +1,18 @@
 package com.doordash.doordashlite
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.FragmentTransaction
-import com.doordash.doordashlite.repository.ui.RestaurantsPagedListAdapter
+import androidx.lifecycle.Observer
 
-class MainActivity : AppCompatActivity(), RestaurantsPagedListAdapter.AdapterCallback {
+class MainActivity : BaseActivity() {
     private var dualPane: Boolean = false
     private var currentId = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        init()
         setContentView(R.layout.activity_main)
 
         // Check to see if we have a frame in which to embed the details
@@ -26,8 +26,14 @@ class MainActivity : AppCompatActivity(), RestaurantsPagedListAdapter.AdapterCal
         }
     }
 
-    override fun onItemClicked(id: Int) {
-        showDetails(id)
+    private fun init() {
+        viewModel.showDetails.observe(this, Observer { id ->
+            if (id >= 0) {
+                showDetails(id)
+                // Clear value once showDetails is called
+                viewModel.showDetails.postValue(-1)
+            }
+        })
     }
 
     /**

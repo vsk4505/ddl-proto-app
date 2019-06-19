@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.annotation.VisibleForTesting
 import com.doordash.doordashlite.api.DoorDashLiteApi
 import com.doordash.doordashlite.repository.Repository
+import com.doordash.doordashlite.repository.inDb.CacheManager
 import com.doordash.doordashlite.repository.inMemory.byPage.InMemoryByPageKeyRepository
 import com.doordash.doordashlite.util.Location
 import com.doordash.doordashlite.util.LocationHelper
@@ -43,6 +44,8 @@ interface ServiceLocator {
 
     fun getNetworkExecutor(): Executor
 
+    fun getDiskIOExecutor(): Executor
+
     fun getDoorDashLiteApi(): DoorDashLiteApi
 
     fun getLocation(): Location
@@ -52,6 +55,10 @@ interface ServiceLocator {
  * default implementation of ServiceLocator.
  */
 open class DefaultServiceLocator(val app: Application) : ServiceLocator {
+    // thread pool used for disk access
+    @Suppress("PrivatePropertyName")
+    private val DISK_IO = Executors.newSingleThreadExecutor()
+
     // thread pool used for network requests
     @Suppress("PrivatePropertyName")
     private val NETWORK_IO = Executors.newFixedThreadPool(5)
@@ -64,18 +71,26 @@ open class DefaultServiceLocator(val app: Application) : ServiceLocator {
         LocationHelper.getLocation()
     }
 
+    private val cacheManager by lazy {
+        CacheManager(app.applicationContext)
+    }
+
     override fun getRepository(type: Repository.Type): Repository {
         return when (type) {
             Repository.Type.IN_MEMORY_BY_PAGE -> InMemoryByPageKeyRepository(
                 location = getLocation(),
                 doorDashLiteApi = getDoorDashLiteApi(),
-                networkExecutor = getNetworkExecutor()
+                cacheManager = cacheManager,
+                networkExecutor = getNetworkExecutor(),
+                ioExecutor = getDiskIOExecutor()
             )
             //else -> throw AssertionError()
         }
     }
 
     override fun getNetworkExecutor(): Executor = NETWORK_IO
+
+    override fun getDiskIOExecutor(): Executor = DISK_IO
 
     override fun getDoorDashLiteApi(): DoorDashLiteApi = api
 

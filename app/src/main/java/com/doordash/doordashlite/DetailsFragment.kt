@@ -8,18 +8,15 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.doordash.doordashlite.glide.GlideApp
 import com.doordash.doordashlite.glide.GlideRequests
-import com.doordash.doordashlite.repository.Repository
 import com.doordash.doordashlite.repository.ui.SharedViewModel
 import kotlinx.android.synthetic.main.fragment_details.*
 
 class DetailsFragment : Fragment() {
 
-    var progressBar: ProgressBar? = null
+    private var progressBar: ProgressBar? = null
 
     val shownId: Int by lazy {
         arguments?.getInt(EXTRAS_ID, -1) ?: -1
@@ -75,14 +72,7 @@ class DetailsFragment : Fragment() {
     }
 
     private fun getViewModel(): SharedViewModel {
-        return ViewModelProviders.of(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                val repoType = Repository.Type.values()[Repository.Type.IN_MEMORY_BY_PAGE.ordinal]
-                val repo = ServiceLocator.instance(context!!)
-                    .getRepository(repoType)
-                return SharedViewModel(repo) as T
-            }
-        })[SharedViewModel::class.java]
+        return ViewModelProviders.of(activity!!).get(SharedViewModel::class.java)
     }
 
     fun refresh(id: Int) {
