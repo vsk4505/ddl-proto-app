@@ -90,5 +90,7 @@ class RestaurantsPagedListAdapter(
 
     interface AdapterCallback {
         fun onItemClicked(id: Int)
+        fun onLikeClicked(pos: Int, id: Int)
+        fun isLiked(id: Int?): Boolean?
     }
 }

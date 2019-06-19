@@ -3,4 +3,6 @@
     <string name="retry" translatable="false">Retry</string>
     <string name="DetailsScreenTitle">Details</string>
     <string name="DetailsMessage">No restaurant is selected yet to get details!</string>
+    <string name="Like">Like</string>
+    <string name="Liked">Liked</string>
 </resources>

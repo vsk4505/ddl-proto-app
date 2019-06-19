@@ -6,49 +6,72 @@
         android:layout_height="wrap_content">
     <ImageView
             android:id="@+id/thumbnail"
-            android:layout_width="128dp"
-            android:layout_height="96dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             app:srcCompat="@android:drawable/ic_menu_gallery"
             android:layout_margin="8dp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="8dp" android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp" android:minHeight="72dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp" android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline" android:layout_marginRight="8dp"/>
     <TextView
             android:id="@+id/title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             style="@style/TextTitle"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/thumbnail"
-            app:layout_constraintBottom_toBottomOf="@id/subtitle"
-            app:layout_constraintRight_toLeftOf="@id/time_status"
             android:layout_margin="8dp"
             android:ellipsize="end"
-            android:maxLines="2"
-            app:layout_constraintHorizontal_bias="0.0"
-            tools:text="title"/>
+            tools:text="title"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="8dp" app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="@+id/guideline"
+            android:layout_marginLeft="8dp" app:layout_constraintHorizontal_bias="0.0"/>
     <TextView
             android:id="@+id/subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             style="@style/TextSubTitle"
             android:layout_margin="8dp"
-            app:layout_constraintRight_toLeftOf="@id/time_status"
-            app:layout_constraintLeft_toRightOf="@+id/thumbnail"
             app:layout_constraintTop_toBottomOf="@id/title"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             android:ellipsize="end"
-            android:maxLines="2"
-            tools:text="subtitle"/>
+            tools:text="subtitle"
+            android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="@+id/guideline"
+            android:layout_marginLeft="8dp" android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp" app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            android:layout_marginRight="8dp" android:layout_marginBottom="8dp"
+            app:layout_constraintHorizontal_bias="0" app:layout_constraintVertical_bias="0.0"/>
     <TextView
             android:id="@+id/time_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/TextCaption"
             tools:text="30 mins"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintHorizontal_bias="1"
             android:layout_margin="8dp"
-            app:layout_constraintBottom_toTopOf="parent"
-            app:layout_constraintTop_toBottomOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="8dp"
+            app:layout_constraintStart_toEndOf="@id/guideline2" android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/like"
+            android:text="@string/Like"
+            app:srcCompat="@android:drawable/star_off"
+            app:layout_constraintTop_toBottomOf="@+id/time_status"
+            app:layout_constraintStart_toStartOf="@+id/guideline2" android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp" android:layout_marginBottom="8dp" android:layout_marginTop="8dp"/>
+    <androidx.constraintlayout.widget.Guideline android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                                android:id="@+id/guideline"
+                                                android:orientation="vertical"
+                                                app:layout_constraintGuide_percent="0.3"/>
+    <androidx.constraintlayout.widget.Guideline android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                                android:id="@+id/guideline2"
+                                                android:orientation="vertical"
+                                                app:layout_constraintGuide_percent="0.75"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

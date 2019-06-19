@@ -1,6 +1,5 @@
 package com.doordash.doordashlite.repository.ui
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations.switchMap
 import androidx.lifecycle.ViewModel
@@ -14,6 +13,8 @@ class SharedViewModel(private val repository: Repository) : ViewModel() {
     val PAGE_SIZE: Int = 30
     val details = MutableLiveData<RestaurantDetails>()
     val detailsError = MutableLiveData<String>()
+    val showDetails = MutableLiveData<Int>()
+    val itemRefresh = MutableLiveData<Int>()
     private var repoResult = MutableLiveData<Listing<Restaurant>>()
     val restaurants = switchMap(repoResult) { it.pagedList }!!
     val networkState = switchMap(repoResult) { it.networkState }!!
@@ -44,5 +45,15 @@ class SharedViewModel(private val repository: Repository) : ViewModel() {
                 detailsError.value = message
             }
         })
+    }
+
+    fun storeFavoriteId(pos: Int, id: Int) {
+        repository.storeFavoriteId(id, Runnable {
+            itemRefresh.postValue(pos)
+        })
+    }
+
+    fun isIdInFavorites(id: Int?): Boolean? {
+        return repository.getFavorites()?.contains(id)
     }
 }

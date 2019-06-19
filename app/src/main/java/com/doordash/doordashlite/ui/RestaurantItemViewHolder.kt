@@ -4,11 +4,13 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.doordash.doordashlite.R
 import com.doordash.doordashlite.glide.GlideRequests
 import com.doordash.doordashlite.model.Restaurant
+import kotlinx.android.synthetic.main.restaurant_item.view.*
 
 /**
  * A RecyclerView ViewHolder that displays restaurant item.
@@ -16,17 +18,21 @@ import com.doordash.doordashlite.model.Restaurant
 class RestaurantItemViewHolder(
     view: View,
     private val glide: GlideRequests,
-    adapterItemCallback: RestaurantsPagedListAdapter.AdapterCallback?
+    private val adapterItemCallback: RestaurantsPagedListAdapter.AdapterCallback?
 ) : RecyclerView.ViewHolder(view) {
     private val title: TextView = view.findViewById(R.id.title)
     private val subtitle: TextView = view.findViewById(R.id.subtitle)
     private val status: TextView = view.findViewById(R.id.time_status)
     private val thumbnail: ImageView = view.findViewById(R.id.thumbnail)
+    private val like: Button = view.findViewById(R.id.like)
     private var post: Restaurant? = null
 
     init {
         view.setOnClickListener {
             adapterItemCallback?.onItemClicked(post?.id ?: -1)
+        }
+        like.setOnClickListener {
+            adapterItemCallback?.onLikeClicked(adapterPosition, post?.id ?: -1)
         }
     }
 
@@ -35,6 +41,12 @@ class RestaurantItemViewHolder(
         title.text = post?.name ?: "loading"
         subtitle.text = post?.description ?: "loading"
         status.text = if (post?.statusType == "open") post?.status else post?.statusType
+        like.text =
+            if (adapterItemCallback?.isLiked(post?.id) == true) {
+                itemView.context.getString(R.string.Liked)
+            } else {
+                itemView.context.getString(R.string.Like)
+            }
         if (post?.coverImageUrl?.startsWith("http") == true) {
             thumbnail.visibility = View.VISIBLE
             glide.load(post?.coverImageUrl)

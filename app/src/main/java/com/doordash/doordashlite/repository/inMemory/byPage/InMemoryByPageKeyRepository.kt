@@ -9,6 +9,7 @@ import com.doordash.doordashlite.repository.Repository
 import com.doordash.doordashlite.repository.Listing
 import com.doordash.doordashlite.model.Restaurant
 import com.doordash.doordashlite.model.RestaurantDetails
+import com.doordash.doordashlite.repository.inDb.CacheManager
 import com.doordash.doordashlite.util.Location
 import retrofit2.Call
 import retrofit2.Response
@@ -21,9 +22,10 @@ import java.util.concurrent.Executor
 class InMemoryByPageKeyRepository(
     private val location: Location,
     private val doorDashLiteApi: DoorDashLiteApi,
-    private val networkExecutor: Executor
+    private val cacheManager: CacheManager,
+    private val networkExecutor: Executor,
+    private val ioExecutor: Executor
 ) : Repository {
-
     @MainThread
     override fun listOfRestaurants(pageSize: Int): Listing<Restaurant> {
         val sourceFactory = DataSourceFactory(location, doorDashLiteApi, networkExecutor)
@@ -68,6 +70,18 @@ class InMemoryByPageKeyRepository(
                 listener.onError(t.message)
             }
         })
+    }
+
+    override fun storeFavoriteId(id: Int, commitCallback: Runnable?) {
+        ioExecutor.execute {
+            // Store Id in DB/SharedPref
+            cacheManager.toggleId(id)
+            commitCallback?.run()
+        }
+    }
+
+    override fun getFavorites(): MutableSet<Int>? {
+        return cacheManager.idsMutableSet
     }
 }
 
